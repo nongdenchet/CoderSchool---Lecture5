@@ -22,7 +22,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="@string/API" />
+            android:value="@string/API_KEY" />
 
         <activity android:name=".activity.MainActivity">
             <intent-filter>

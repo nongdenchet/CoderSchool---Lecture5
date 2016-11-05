@@ -7,6 +7,7 @@
     ```xml
         <?xml version="1.0" encoding="utf-8"?>
         <resources>
-            <string name="API">Your API key</string>
+            <string name="API_KEY">Your API key</string>
+            <string name="IMGUR_API_KEY">Your IMGUR API key</string>
         </resources>
     ```

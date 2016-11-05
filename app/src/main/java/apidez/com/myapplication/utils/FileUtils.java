@@ -11,11 +11,24 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+
 /**
  * Created by nongdenchet on 11/5/16.
  */
 
 public class FileUtils {
+
+    public static MultipartBody.Part partFromFile(File file) {
+        RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+        return MultipartBody.Part.createFormData("image", file.getName(), reqFile);
+    }
+
+    public static RequestBody requestBodyFromFile(File file) {
+        return RequestBody.create(MediaType.parse("text/plain"), file.getName());
+    }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void store(Bitmap resizedBitmap, Uri resizedUri) throws IOException {
