@@ -17,7 +17,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -31,6 +30,9 @@
         <activity
             android:name=".activity.CameraActivity"
             android:label="@string/camera" />
+        <activity
+            android:name=".activity.AudioActivity"
+            android:label="@string/audio" />
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

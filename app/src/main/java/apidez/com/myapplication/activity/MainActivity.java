@@ -24,4 +24,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CameraActivity.class);
         startActivity(intent);
     }
+
+    public void openAudio(View view) {
+        Intent intent = new Intent(this, AudioActivity.class);
+        startActivity(intent);
+    }
 }
