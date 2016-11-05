@@ -30,19 +30,19 @@ public class CameraActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
-        PermissionUtils.requestCamera(this);
+        PermissionUtils.requestExternal(this);
         ivPreview = (ImageView) findViewById(R.id.ivPreview);
     }
 
     public void openCamera(View view) {
-        if (PermissionUtils.checkCamera(this)) {
+        if (PermissionUtils.checkExternal(this)) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri(photoFileName));
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
             }
         } else {
-            PermissionUtils.requestCamera(this);
+            PermissionUtils.requestExternal(this);
         }
     }
 

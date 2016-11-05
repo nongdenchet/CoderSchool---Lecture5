@@ -24,6 +24,13 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/API" />
 
+        <activity android:name=".activity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activity.MapActivity"
             android:label="@string/map" />
@@ -33,12 +40,8 @@
         <activity
             android:name=".activity.AudioActivity"
             android:label="@string/audio" />
-        <activity android:name=".activity.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity
+            android:name=".activity.VideoActivity"
+            android:label="@string/video" />
     </application>
 </manifest>

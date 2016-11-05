@@ -23,8 +23,8 @@ public class PermissionUtils {
         }
     }
 
-    public static void requestCamera(Activity context) {
-        if (!checkCamera(context)) {
+    public static void requestExternal(Activity context) {
+        if (!checkExternal(context)) {
             ActivityCompat.requestPermissions(context, new String[]{
                             Manifest.permission.READ_EXTERNAL_STORAGE,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -39,7 +39,7 @@ public class PermissionUtils {
                 != PackageManager.PERMISSION_GRANTED);
     }
 
-    public static boolean checkCamera(Context context) {
+    public static boolean checkExternal(Context context) {
         return !(ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)

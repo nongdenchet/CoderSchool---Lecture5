@@ -28,4 +28,10 @@
         android:layout_height="wrap_content"
         android:onClick="openAudio"
         android:text="Audio" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="openVideo"
+        android:text="@string/video" />
 </LinearLayout>
