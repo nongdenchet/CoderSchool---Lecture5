@@ -1,4 +1,4 @@
-package apidez.com.myapplication;
+package apidez.com.myapplication.utils;
 
 import android.Manifest;
 import android.app.Activity;
@@ -12,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 
 public class PermissionUtils {
     public static final int REQUEST_LOCATION = 1000;
+    public static final int REQUEST_CAMERA = 2000;
 
     public static void requestLocaiton(Activity context) {
         if (!checkLocation(context)) {
@@ -22,10 +23,26 @@ public class PermissionUtils {
         }
     }
 
+    public static void requestCamera(Activity context) {
+        if (!checkCamera(context)) {
+            ActivityCompat.requestPermissions(context, new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_CAMERA);
+        }
+    }
+
     public static boolean checkLocation(Context context) {
         return !(ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED);
+    }
+
+    public static boolean checkCamera(Context context) {
+        return !(ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED);
     }
 }

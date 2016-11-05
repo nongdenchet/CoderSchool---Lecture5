@@ -1,4 +1,4 @@
-package apidez.com.myapplication;
+package apidez.com.myapplication.activity;
 
 import android.location.Location;
 import android.os.Bundle;
@@ -26,9 +26,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import apidez.com.myapplication.utils.PermissionUtils;
+import apidez.com.myapplication.R;
+
 import static apidez.com.myapplication.R.id.map;
 
-public class MainActivity extends AppCompatActivity implements LocationListener,
+public class MapActivity extends AppCompatActivity implements LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
     private long UPDATE_INTERVAL = 30 * 1000;
@@ -43,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_map);
         setUpMapIfNeeded();
         PermissionUtils.requestLocaiton(this);
         mGoogleApiClient = new GoogleApiClient.Builder(this)
