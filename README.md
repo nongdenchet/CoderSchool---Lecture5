@@ -1,4 +1,5 @@
 # CoderSchool --- Lecture 5
+<<<<<<< HEAD
 ### To run the map activity:
     1. Create a new application from [Google Console](console.developers.google.com)
     2. Create a new Android API key
@@ -11,3 +12,4 @@
             <string name="IMGUR_CLIENT_ID">Your IMGUR CLIENT ID</string>
         </resources>
     ```
+=======
