@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -32,8 +30,8 @@ public class CameraActivity extends AppCompatActivity {
     public final String APP_TAG = "CoderSchool";
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1000;
     public final static int UPLOAD_IMAGE_ACTIVITY_REQUEST_CODE = 2000;
-    public String photoFileName = "photo.jpg";
     private ImageView ivPreview;
+    private String mCurrentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,18 +49,6 @@ public class CameraActivity extends AppCompatActivity {
         openCamera(UPLOAD_IMAGE_ACTIVITY_REQUEST_CODE);
     }
 
-    public Uri getPhotoFileUri(String fileName) {
-        if (isExternalStorageAvailable()) {
-            File mediaStorageDir = new File(
-                    getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
-            if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
-                Log.d(APP_TAG, "failed to create directory");
-            }
-            return Uri.fromFile(new File(mediaStorageDir.getPath() + File.separator + fileName));
-        }
-        return null;
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -75,15 +61,12 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isExternalStorageAvailable() {
-        String state = Environment.getExternalStorageState();
-        return state.equals(Environment.MEDIA_MOUNTED);
-    }
-
     private void openCamera(int requestCode) {
         if (PermissionUtils.checkExternal(this)) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri(photoFileName));
+            File file = FileUtils.createPhotoFile(this);
+            mCurrentPhotoPath = file.getAbsolutePath();
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivityForResult(intent, requestCode);
             }
@@ -93,11 +76,10 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     private void takeImage() {
-        Uri takenPhotoUri = getPhotoFileUri(photoFileName);
-        Bitmap rotatedBitmap = FileUtils.rotateBitmapOrientation(takenPhotoUri.getPath());
+        Bitmap rotatedBitmap = FileUtils.rotateBitmapOrientation(mCurrentPhotoPath);
         Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(rotatedBitmap, 500);
         try {
-            FileUtils.store(resizedBitmap, getPhotoFileUri(photoFileName + "_resized"));
+            FileUtils.store(resizedBitmap, mCurrentPhotoPath);
         } catch (IOException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -105,7 +87,7 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     private void uploadImage() {
-        File file = new File(getPhotoFileUri(photoFileName).getPath());
+        File file = new File(mCurrentPhotoPath);
         RetrofitUtils.get(getString(R.string.IMGUR_CLIENT_ID))
                 .create(ImgurApi.class)
                 .create(FileUtils.partFromFile(file), FileUtils.requestBodyFromFile(file))
