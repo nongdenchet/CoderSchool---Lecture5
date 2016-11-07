@@ -2,6 +2,7 @@ package apidez.com.myapplication.activity;
 
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,8 +27,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import apidez.com.myapplication.utils.PermissionUtils;
 import apidez.com.myapplication.R;
+import apidez.com.myapplication.utils.PermissionUtils;
 
 import static apidez.com.myapplication.R.id.map;
 
@@ -134,9 +135,9 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public void onLocationChanged(Location location) {
-        String msg = "Updated Location: " +
-                Double.toString(location.getLatitude()) + "," +
-                Double.toString(location.getLongitude());
+        String msg = "Updated Location: "
+                + Double.toString(location.getLatitude()) + ","
+                + Double.toString(location.getLongitude());
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         mCurrentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
         updateCamera();
@@ -158,31 +159,19 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
     }
 
     private void dropPinEffect(final Marker marker) {
-        // Handler allows us to repeat a code block after a specified delay
-        final android.os.Handler handler = new android.os.Handler();
+        final Handler handler = new Handler();
         final long start = SystemClock.uptimeMillis();
         final long duration = 1500;
-
-        // Use the bounce interpolator
-        final android.view.animation.Interpolator interpolator =
-                new BounceInterpolator();
-
-        // Animate marker with a bounce updating its position every 15ms
+        final android.view.animation.Interpolator interpolator = new BounceInterpolator();
         handler.post(new Runnable() {
             @Override
             public void run() {
                 long elapsed = SystemClock.uptimeMillis() - start;
-                // Calculate t for bounce based on elapsed time
-                float t = Math.max(
-                        1 - interpolator.getInterpolation((float) elapsed
-                                / duration), 0);
-                // Set the anchor
+                float t = Math.max(1 - interpolator.getInterpolation((float) elapsed / duration), 0);
                 marker.setAnchor(0.5f, 1.0f + 14 * t);
-
                 if (t > 0.0) {
-                    // Post this event again 15ms from now.
                     handler.postDelayed(this, 15);
-                } else { // done elapsing, show window
+                } else {
                     marker.showInfoWindow();
                 }
             }
