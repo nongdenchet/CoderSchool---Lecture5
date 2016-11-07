@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.animation.BounceInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -162,7 +163,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
         final Handler handler = new Handler();
         final long start = SystemClock.uptimeMillis();
         final long duration = 1500;
-        final android.view.animation.Interpolator interpolator = new BounceInterpolator();
+        final Interpolator interpolator = new BounceInterpolator();
         handler.post(new Runnable() {
             @Override
             public void run() {
