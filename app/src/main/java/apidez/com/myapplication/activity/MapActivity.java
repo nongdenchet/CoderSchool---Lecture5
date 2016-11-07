@@ -90,10 +90,10 @@ public class MapActivity extends AppCompatActivity implements LocationListener,
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         if (PermissionUtils.checkLocation(this)) {
-            Location mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            if (mCurrentLocation != null) {
-                Log.d("DEBUG", "current location: " + mCurrentLocation.toString());
-                mCurrentLatLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+            Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            if (location != null) {
+                Log.d("DEBUG", "current location: " + location.toString());
+                mCurrentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                 updateCamera();
             }
             startLocationUpdates();
