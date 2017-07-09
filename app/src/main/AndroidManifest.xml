@@ -15,6 +15,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:name=".MyApp"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
         <meta-data
@@ -38,10 +39,9 @@
             android:name=".activity.CameraActivity"
             android:label="@string/camera" />
         <activity
-            android:name=".activity.AudioActivity"
-            android:label="@string/audio" />
-        <activity
-            android:name=".activity.VideoActivity"
-            android:label="@string/video" />
+            android:name=".activity.PlayerActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:label="@string/player_activity_name"
+            android:theme="@style/PlayerTheme" />
     </application>
 </manifest>

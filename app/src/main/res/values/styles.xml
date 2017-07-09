@@ -8,4 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="PlayerTheme" parent="AppTheme">
+        <item name="android:windowBackground">@null</item>
+    </style>
 </resources>
