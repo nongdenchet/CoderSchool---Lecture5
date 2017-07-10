@@ -5,26 +5,26 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
 
 import apidez.com.myapplication.R;
-import apidez.com.myapplication.api.ImgurApi;
-import apidez.com.myapplication.model.ImageResponse;
 import apidez.com.myapplication.utils.BitmapScaler;
 import apidez.com.myapplication.utils.FileUtils;
 import apidez.com.myapplication.utils.PermissionUtils;
-import apidez.com.myapplication.utils.RetrofitUtils;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class CameraActivity extends AppCompatActivity {
     public final String APP_TAG = "CoderSchool";
@@ -32,6 +32,7 @@ public class CameraActivity extends AppCompatActivity {
     public final static int UPLOAD_IMAGE_ACTIVITY_REQUEST_CODE = 2000;
     private ImageView ivPreview;
     private String mCurrentPhotoPath;
+    private StorageReference mStorageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class CameraActivity extends AppCompatActivity {
         setContentView(R.layout.activity_camera);
         PermissionUtils.requestExternal(this);
         ivPreview = (ImageView) findViewById(R.id.ivPreview);
+        mStorageReference = FirebaseStorage.getInstance().getReference();
     }
 
     public void openCamera(View view) {
@@ -66,7 +68,7 @@ public class CameraActivity extends AppCompatActivity {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             File file = FileUtils.createPhotoFile(this);
             mCurrentPhotoPath = file.getAbsolutePath();
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, FileUtils.fromFile(this, file));
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivityForResult(intent, requestCode);
             }
@@ -86,23 +88,23 @@ public class CameraActivity extends AppCompatActivity {
         ivPreview.setImageBitmap(resizedBitmap);
     }
 
+    @SuppressWarnings("VisibleForTests")
     private void uploadImage() {
-        File file = new File(mCurrentPhotoPath);
-        RetrofitUtils.get(getString(R.string.IMGUR_CLIENT_ID))
-                .create(ImgurApi.class)
-                .create(FileUtils.partFromFile(file), FileUtils.requestBodyFromFile(file))
-                .enqueue(new Callback<ImageResponse>() {
+        Uri file = FileUtils.fromFile(this, mCurrentPhotoPath);
+        mStorageReference.child("images/" + file.getLastPathSegment())
+                .putFile(file)
+                .addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onResponse(Call<ImageResponse> call, Response<ImageResponse> response) {
-                        ImageResponse imageResponse = response.body();
-                        Glide.with(CameraActivity.this)
-                                .load(imageResponse.getData().getLink())
-                                .into(ivPreview);
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(CameraActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-
+                })
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
-                    public void onFailure(Call<ImageResponse> call, Throwable t) {
-                        Toast.makeText(CameraActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Glide.with(CameraActivity.this)
+                                .load(taskSnapshot.getDownloadUrl())
+                                .into(ivPreview);
                     }
                 });
     }
