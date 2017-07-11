@@ -14,15 +14,6 @@ public class PermissionUtils {
     public static final int REQUEST_LOCATION = 1000;
     public static final int REQUEST_CAMERA = 2000;
 
-    public static void requestLocaiton(Activity context) {
-        if (!checkLocation(context)) {
-            ActivityCompat.requestPermissions(context, new String[]{
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION},
-                    REQUEST_LOCATION);
-        }
-    }
-
     public static void requestExternal(Activity context) {
         if (!checkExternal(context)) {
             ActivityCompat.requestPermissions(context, new String[]{
@@ -30,13 +21,6 @@ public class PermissionUtils {
                             Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     REQUEST_CAMERA);
         }
-    }
-
-    public static boolean checkLocation(Context context) {
-        return !(ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED);
     }
 
     public static boolean checkExternal(Context context) {
