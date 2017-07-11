@@ -69,9 +69,19 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        releasePlayer();
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
     }
 
     private void releasePlayer() {
